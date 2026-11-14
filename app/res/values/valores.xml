@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_nome">Controle Projetor 2</string>
+    <string name="sem_ir">Este celular não tem emissor infravermelho, então o controle não funciona nele.</string>
+    <string name="sem_foco">Este código não tem foco. Abra Ajustes e troque o código ou use a busca de foco.</string>
+    <string name="sem_botao">Este código não tem esse botão. Troque o código em Ajustes.</string>
+    <string name="ajustes">Ajustes</string>
+    <string name="titulo_perfil">Código do projetor</string>
+    <string name="ajuda_perfil">Se os botões não funcionam, troque o código e teste o VOL + até o projetor responder.</string>
+    <string name="perfil_atual">Código %1$d de %2$d · %3$s</string>
+    <string name="titulo_busca">Busca do foco</string>
+    <string name="ajuda_busca">Use quando o controle já funciona mas o FOCO não. Aponte para o projetor, toque em Iniciar e olhe a imagem. Quando o foco mexer, toque em Pausar, confira com Repetir e salve como FOCO + ou FOCO −.</string>
+    <string name="busca_iniciar">Iniciar</string>
+    <string name="busca_pausar">Pausar</string>
+    <string name="busca_parada">Nenhum teste feito ainda</string>
+    <string name="busca_testando">Testando número %1$d de 255</string>
+    <string name="busca_fim">Fim da busca: nenhum número sobrou para testar</string>
+    <string name="busca_nada">Faça a busca primeiro</string>
+    <string name="repetir">Repetir</string>
+    <string name="salvar_mais">Salvar FOCO +</string>
+    <string name="salvar_menos">Salvar FOCO −</string>
+    <string name="apagar_foco">Apagar foco salvo</string>
+    <string name="salvo_mais">Número %1$d salvo no FOCO +</string>
+    <string name="salvo_menos">Número %1$d salvo no FOCO −</string>
+    <string name="foco_apagado">Foco salvo apagado</string>
+
+    <color name="fundo">#000000</color>
+    <color name="corpo">#151517</color>
+    <color name="botao">#27272B</color>
+    <color name="botao_claro">#3A3A40</color>
+    <color name="texto">#E6E6EA</color>
+    <color name="texto_fraco">#8E8E96</color>
+    <color name="vermelho">#FF453A</color>
+
+    <style name="Tema" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/fundo</item>
+        <item name="android:statusBarColor">@color/fundo</item>
+        <item name="android:navigationBarColor">@color/fundo</item>
+        <item name="android:colorAccent">@color/texto</item>
+    </style>
+
+    <style name="Redondo">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:background">@drawable/bg_redondo</item>
+        <item name="android:scaleType">center</item>
+    </style>
+
+    <style name="Seta">
+        <item name="android:layout_width">68dp</item>
+        <item name="android:layout_height">68dp</item>
+        <item name="android:background">@drawable/bg_toque</item>
+        <item name="android:scaleType">center</item>
+    </style>
+
+    <style name="Gangorra">
+        <item name="android:layout_width">64dp</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="android:background">@drawable/bg_toque</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/texto</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="Chip">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:minWidth">52dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/bg_chip</item>
+        <item name="android:textColor">@color/texto</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="Titulo">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/texto</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Ajuda">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/texto_fraco</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+    </style>
+</resources>
