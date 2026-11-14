@@ -32,7 +32,12 @@ public class MainActivity extends Activity {
     private boolean buscando;
     private int comandoBusca = -1;
 
-    private TextView txtPerfil, txtBusca, txtAviso, btnBusca;
+    private static final String[] NOMES = {"Ligar", "Cima", "Baixo", "Esquerda", "Direita", "OK",
+            "Voltar", "Início", "Menu", "Entrada", "VOL +", "VOL −", "Mudo", "FOCO +", "FOCO −",
+            "Play/Pausa"};
+
+    private int alvo;
+    private TextView txtPerfil, txtBusca, txtAviso, btnBusca, txtAlvo, txtFaltam;
     private View painelAjustes;
 
     @Override
@@ -41,6 +46,11 @@ public class MainActivity extends Activity {
         setContentView(R.layout.main);
 
         prefs = getSharedPreferences("controle", MODE_PRIVATE);
+        if (prefs.getInt("versao", 0) < 3) {
+            // a versao 3 colocou o perfil do Bettdow AC1042 em primeiro; os botoes salvos
+            // antes valiam para a ordem antiga
+            prefs.edit().clear().putInt("versao", 3).apply();
+        }
         perfilAtual = prefs.getInt("perfil", 0);
         if (perfilAtual < 0 || perfilAtual >= Perfis.LISTA.length) perfilAtual = 0;
 
@@ -59,6 +69,8 @@ public class MainActivity extends Activity {
         txtBusca = (TextView) findViewById(R.id.txt_busca);
         txtAviso = (TextView) findViewById(R.id.txt_aviso);
         btnBusca = (TextView) findViewById(R.id.btn_busca);
+        txtAlvo = (TextView) findViewById(R.id.txt_alvo);
+        txtFaltam = (TextView) findViewById(R.id.txt_faltam);
         painelAjustes = findViewById(R.id.painel_ajustes);
 
         if (!temIr) {
@@ -96,11 +108,14 @@ public class MainActivity extends Activity {
         clique(R.id.btn_busca_ant, new Runnable() { public void run() { passoBusca(-1); }});
         clique(R.id.btn_busca_prox, new Runnable() { public void run() { passoBusca(1); }});
         clique(R.id.btn_busca_repetir, new Runnable() { public void run() { passoBusca(0); }});
-        clique(R.id.btn_salvar_mais, new Runnable() { public void run() { salvarFoco(Perfis.FOCUS_PLUS); }});
-        clique(R.id.btn_salvar_menos, new Runnable() { public void run() { salvarFoco(Perfis.FOCUS_MINUS); }});
-        clique(R.id.btn_apagar_foco, new Runnable() { public void run() { apagarFoco(); }});
+        clique(R.id.btn_alvo_ant, new Runnable() { public void run() { trocarAlvo(-1); }});
+        clique(R.id.btn_alvo_prox, new Runnable() { public void run() { trocarAlvo(1); }});
+        clique(R.id.btn_salvar, new Runnable() { public void run() { salvar(); }});
+        clique(R.id.btn_apagar, new Runnable() { public void run() { apagar(); }});
 
         mostrarPerfil();
+        alvo = proximoSemCodigo(0);
+        mostrarAlvo();
         mostrarBusca();
     }
 
@@ -140,14 +155,14 @@ public class MainActivity extends Activity {
         });
     }
 
-    /** Codigo da tecla no perfil atual; o foco salvo pela busca tem prioridade. */
+    /** Codigo da tecla no perfil atual; o que foi salvo pela busca tem prioridade. */
     private int codigoDe(int tecla) {
-        int salvo = prefs.getInt(chaveFoco(perfilAtual, tecla), -1);
+        int salvo = prefs.getInt(chaveSalva(perfilAtual, tecla), -1);
         if (salvo >= 0) return salvo;
         return Perfis.LISTA[perfilAtual].codigos[tecla];
     }
 
-    private static String chaveFoco(int perfil, int tecla) {
+    private static String chaveSalva(int perfil, int tecla) {
         return "p" + perfil + "_t" + tecla;
     }
 
@@ -159,8 +174,7 @@ public class MainActivity extends Activity {
         }
         int codigo = codigoDe(tecla);
         if (codigo < 0) {
-            boolean foco = tecla == Perfis.FOCUS_PLUS || tecla == Perfis.FOCUS_MINUS;
-            avisar(getString(foco ? R.string.sem_foco : R.string.sem_botao));
+            avisar(getString(R.string.sem_botao));
             return;
         }
         final int[] sinal = Nec.sinal(Perfis.LISTA[perfilAtual], codigo);
@@ -199,6 +213,8 @@ public class MainActivity extends Activity {
         comandoBusca = -1;
         mostrarPerfil();
         mostrarBusca();
+        alvo = proximoSemCodigo(0);
+        mostrarAlvo();
     }
 
     private void mostrarPerfil() {
@@ -206,7 +222,7 @@ public class MainActivity extends Activity {
                 perfilAtual + 1, Perfis.LISTA.length, Perfis.LISTA[perfilAtual].nome));
     }
 
-    // ---------- busca do codigo de foco ----------
+    // ---------- busca do codigo dos botoes ----------
 
     private final Runnable tiqueBusca = new Runnable() {
         public void run() {
@@ -221,12 +237,11 @@ public class MainActivity extends Activity {
         }
     };
 
-    /** Comandos que o perfil ja usa em outro botao nao precisam ser testados (ex.: desligar). */
+    /** Comandos que ja estao em algum botao nao precisam ser testados de novo. */
     private boolean comandoJaUsado(int comando) {
-        int[] codigos = Perfis.LISTA[perfilAtual].codigos;
-        for (int t = 0; t < codigos.length; t++) {
-            if (t == Perfis.FOCUS_PLUS || t == Perfis.FOCUS_MINUS) continue;
-            if (codigos[t] >= 0 && (codigos[t] & 0xFF) == comando) return true;
+        for (int t = 0; t < Perfis.TOTAL_TECLAS; t++) {
+            int codigo = codigoDe(t);
+            if (codigo >= 0 && (codigo & 0xFF) == comando) return true;
         }
         return false;
     }
@@ -288,22 +303,52 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void salvarFoco(int tecla) {
+    /** Primeira tecla sem codigo a partir de "inicio"; se todas tem, devolve "inicio". */
+    private int proximoSemCodigo(int inicio) {
+        for (int i = 0; i < Perfis.TOTAL_TECLAS; i++) {
+            int t = (inicio + i) % Perfis.TOTAL_TECLAS;
+            if (codigoDe(t) < 0) return t;
+        }
+        return inicio % Perfis.TOTAL_TECLAS;
+    }
+
+    private void trocarAlvo(int passo) {
+        alvo = (alvo + passo + Perfis.TOTAL_TECLAS) % Perfis.TOTAL_TECLAS;
+        mostrarAlvo();
+    }
+
+    private void mostrarAlvo() {
+        txtAlvo.setText(NOMES[alvo]);
+        StringBuilder faltam = new StringBuilder();
+        for (int t = 0; t < Perfis.TOTAL_TECLAS; t++) {
+            if (codigoDe(t) >= 0) continue;
+            if (faltam.length() > 0) faltam.append(", ");
+            faltam.append(NOMES[t]);
+        }
+        txtFaltam.setText(faltam.length() == 0
+                ? getString(R.string.faltam_nenhum) : getString(R.string.faltam, faltam));
+    }
+
+    private void salvar() {
         pararBusca();
         if (comandoBusca < 0) {
             avisar(getString(R.string.busca_nada));
             return;
         }
-        prefs.edit().putInt(chaveFoco(perfilAtual, tecla), Nec.codigoSimples(comandoBusca)).apply();
-        Toast.makeText(this, getString(tecla == Perfis.FOCUS_PLUS
-                ? R.string.salvo_mais : R.string.salvo_menos, comandoBusca), Toast.LENGTH_SHORT).show();
+        prefs.edit().putInt(chaveSalva(perfilAtual, alvo), Nec.codigoSimples(comandoBusca)).apply();
+        Toast.makeText(this, getString(R.string.salvo, comandoBusca, NOMES[alvo]),
+                Toast.LENGTH_SHORT).show();
+        alvo = proximoSemCodigo(alvo);
+        mostrarAlvo();
     }
 
-    private void apagarFoco() {
-        prefs.edit()
-                .remove(chaveFoco(perfilAtual, Perfis.FOCUS_PLUS))
-                .remove(chaveFoco(perfilAtual, Perfis.FOCUS_MINUS))
-                .apply();
-        Toast.makeText(this, R.string.foco_apagado, Toast.LENGTH_SHORT).show();
+    private void apagar() {
+        pararBusca();
+        SharedPreferences.Editor e = prefs.edit();
+        for (int t = 0; t < Perfis.TOTAL_TECLAS; t++) e.remove(chaveSalva(perfilAtual, t));
+        e.apply();
+        Toast.makeText(this, R.string.apagado, Toast.LENGTH_SHORT).show();
+        alvo = proximoSemCodigo(0);
+        mostrarAlvo();
     }
 }

@@ -39,6 +39,13 @@ PERFIS = [
 ]
 
 
+# Perfis montados a mao: (nome, endereco, {tecla: comando})
+# Bettdow AC1042: testado no aparelho - endereco 0x00, 0x8C e 0x9C mexem no foco.
+MANUAIS = [
+    ("Bettdow AC1042", 0x00, {"FOCUS_PLUS": 0x8C, "FOCUS_MINUS": 0x9C}),
+]
+
+
 def normaliza(nome):
     return re.sub(r"[\s_]", "", nome.lower())
 
@@ -63,6 +70,11 @@ def le_ir(caminho):
 
 def main(pasta_ir, saida):
     linhas = []
+    for nome, end, mapa in MANUAIS:
+        codigos = [(mapa[t] | ((mapa[t] ^ 0xFF) << 8)) if t in mapa else -1 for t in TECLAS]
+        linhas.append('        new Perfil("%s", 0x%02X, 0x%02X, false, new int[]{%s}),' % (
+            nome, end, end ^ 0xFF,
+            ", ".join("-1" if c < 0 else "0x%04X" % c for c in codigos)))
     for arquivo, nome in PERFIS:
         botoes = le_ir(pasta_ir + "/" + arquivo)
         protocolos = {b["protocol"] for b in botoes}

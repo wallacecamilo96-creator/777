@@ -2,14 +2,13 @@
 <resources>
     <string name="app_nome">Controle Projetor 2</string>
     <string name="sem_ir">Este celular não tem emissor infravermelho, então o controle não funciona nele.</string>
-    <string name="sem_foco">Este código não tem foco. Abra Ajustes e troque o código ou use a busca de foco.</string>
-    <string name="sem_botao">Este código não tem esse botão. Troque o código em Ajustes.</string>
+    <string name="sem_botao">Este botão ainda não tem código. Abra Ajustes e use a busca de botões.</string>
     <string name="ajustes">Ajustes</string>
     <string name="titulo_perfil">Código do projetor</string>
-    <string name="ajuda_perfil">Se os botões não funcionam, troque o código e teste o VOL + até o projetor responder.</string>
+    <string name="ajuda_perfil">O código 1 é o do Bettdow AC1042. Os outros são de projetores parecidos.</string>
     <string name="perfil_atual">Código %1$d de %2$d · %3$s</string>
-    <string name="titulo_busca">Busca do foco</string>
-    <string name="ajuda_busca">Use quando o controle já funciona mas o FOCO não. Aponte para o projetor, toque em Iniciar e olhe a imagem. Quando o foco mexer, toque em Pausar, confira com Repetir e salve como FOCO + ou FOCO −.</string>
+    <string name="titulo_busca">Busca de botões</string>
+    <string name="ajuda_busca">Descobre o código dos botões que ainda não funcionam. Deixe o projetor na tela inicial, aponte o celular, toque em Iniciar e fique olhando. Quando o projetor reagir (mexer a seleção, abrir menu, mudar o volume, desligar), toque em Pausar. Use Repetir e as setas para achar o número exato, escolha o botão e toque em Salvar.</string>
     <string name="busca_iniciar">Iniciar</string>
     <string name="busca_pausar">Pausar</string>
     <string name="busca_parada">Nenhum teste feito ainda</string>
@@ -17,12 +16,13 @@
     <string name="busca_fim">Fim da busca: nenhum número sobrou para testar</string>
     <string name="busca_nada">Faça a busca primeiro</string>
     <string name="repetir">Repetir</string>
-    <string name="salvar_mais">Salvar FOCO +</string>
-    <string name="salvar_menos">Salvar FOCO −</string>
-    <string name="apagar_foco">Apagar foco salvo</string>
-    <string name="salvo_mais">Número %1$d salvo no FOCO +</string>
-    <string name="salvo_menos">Número %1$d salvo no FOCO −</string>
-    <string name="foco_apagado">Foco salvo apagado</string>
+    <string name="salvar_em">Salvar este número no botão:</string>
+    <string name="salvar">Salvar</string>
+    <string name="salvo">Número %1$d salvo no botão %2$s</string>
+    <string name="faltam">Botões sem código: %1$s</string>
+    <string name="faltam_nenhum">Todos os botões têm código.</string>
+    <string name="apagar">Apagar botões salvos deste código</string>
+    <string name="apagado">Botões salvos apagados</string>
 
     <color name="fundo">#000000</color>
     <color name="corpo">#151517</color>

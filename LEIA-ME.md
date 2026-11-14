@@ -9,16 +9,17 @@ Xiaomi/Poco com emissor infravermelho. Tem FOCO + e FOCO −.
 2. Permita instalar apps desta fonte e confirme "Instalar mesmo assim".
 3. Abra "Controle Projetor 2" e aponte o topo do celular para o projetor.
 
-## Se os botões não responderem
+## Códigos
 
-Toque em **Ajustes**, troque o **código do projetor** com as setas e teste o
-VOL + em cada um até o projetor responder. São 9 códigos.
+O código 1 (Bettdow AC1042) já vem com FOCO + e FOCO −, confirmados no aparelho
+(NEC, endereço 0x00, comandos 0x8C e 0x9C). Os outros botões ainda não têm código.
 
-## Se o controle funciona mas o FOCO não
+## Descobrir os botões que faltam
 
-Em **Ajustes > Busca do foco**, toque em Iniciar e olhe a imagem. Quando o foco
-mexer, toque em Pausar, confira com Repetir e salve como FOCO + ou FOCO −.
-Se a lente do projetor tem um anel de foco manual, nenhum botão vai mexer no foco.
+Em **Ajustes > Busca de botões**, deixe o projetor na tela inicial, toque em
+Iniciar e fique olhando. Quando o projetor reagir, toque em Pausar, confira com
+Repetir e as setas, escolha o botão e toque em Salvar. O que for salvo fica
+guardado no celular.
 
 ## Compilar
 

@@ -299,40 +299,52 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/repetir" />
 
+            <TextView
+                style="@style/Ajuda"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="6dp"
+                android:text="@string/salvar_em" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView android:id="@+id/btn_alvo_ant" style="@style/Chip" android:text="◀" />
 
                 <TextView
-                    android:id="@+id/btn_salvar_mais"
-                    style="@style/Chip"
+                    android:id="@+id/txt_alvo"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginRight="4dp"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
-                    android:text="@string/salvar_mais" />
+                    android:gravity="center"
+                    android:textColor="@color/texto"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/btn_salvar_menos"
-                    style="@style/Chip"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="4dp"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
-                    android:text="@string/salvar_menos" />
+                <TextView android:id="@+id/btn_alvo_prox" style="@style/Chip" android:text="▶" />
             </LinearLayout>
 
             <TextView
-                android:id="@+id/btn_apagar_foco"
+                android:id="@+id/btn_salvar"
                 style="@style/Chip"
                 android:layout_width="match_parent"
                 android:layout_marginTop="8dp"
+                android:background="@drawable/bg_chip_claro"
+                android:text="@string/salvar" />
+
+            <TextView
+                android:id="@+id/txt_faltam"
+                style="@style/Ajuda"
+                android:layout_marginTop="14dp" />
+
+            <TextView
+                android:id="@+id/btn_apagar"
+                style="@style/Chip"
+                android:layout_width="match_parent"
                 android:textColor="@color/texto_fraco"
-                android:text="@string/apagar_foco" />
+                android:text="@string/apagar" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
